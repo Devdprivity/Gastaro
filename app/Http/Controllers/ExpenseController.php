@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Expense;
+use App\Models\Income;
 use App\Models\SharedExpense;
 use App\Models\User;
 use App\Services\NotificationService;
@@ -20,9 +21,14 @@ class ExpenseController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(20);
 
-        // Calculate stats (assuming all are expenses for now)
+        // Calculate stats
         $totalExpenses = $request->user()->expenses()->sum('amount');
-        $totalIncome = 0; // For future implementation
+
+        // Calculate total income from all income records
+        $totalIncome = $request->user()
+            ->incomes()
+            ->selectRaw('SUM(salary + payments + transfers + cash) as total')
+            ->value('total') ?? 0;
 
         // Get expenses grouped by date for chart (last 7 days)
         $chartData = $request->user()
