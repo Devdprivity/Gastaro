@@ -50,14 +50,14 @@ class SharedExpenseCreateController extends Controller
             'shared_amount' => $sharedAmount,
             'status' => 'pending',
             // Guardar datos del gasto para crear después
-            'expense_data' => json_encode([
+            'expense_data' => [
                 'amount' => $totalAmount,
                 'description' => $validated['description'],
                 'category' => $validated['category'],
                 'expense_date' => $validated['expense_date'],
                 'notes' => $validated['notes'],
                 'image' => $imagePath,
-            ]),
+            ],
         ]);
 
         // Crear notificación para el usuario con quien se comparte

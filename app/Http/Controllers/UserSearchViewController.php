@@ -30,17 +30,26 @@ class UserSearchViewController extends Controller
                     ? $sharedExpense->sharedWith
                     : $sharedExpense->owner;
 
+                // Si el gasto aún no ha sido aceptado, usar expense_data
+                $expenseData = $sharedExpense->expense
+                    ? [
+                        'description' => $sharedExpense->expense->description,
+                        'amount' => (float) $sharedExpense->shared_amount,
+                        'fullDescription' => $sharedExpense->expense->notes ?? $sharedExpense->expense->description,
+                    ]
+                    : [
+                        'description' => $sharedExpense->expense_data['description'] ?? 'Gasto compartido',
+                        'amount' => (float) $sharedExpense->shared_amount,
+                        'fullDescription' => $sharedExpense->expense_data['notes'] ?? $sharedExpense->expense_data['description'] ?? 'Gasto compartido',
+                    ];
+
                 return [
                     'id' => $sharedExpense->id,
                     'user' => [
                         'name' => $otherUser->name,
                         'avatar' => $otherUser->avatar,
                     ],
-                    'expense' => [
-                        'description' => $sharedExpense->expense->description,
-                        'amount' => (float) $sharedExpense->shared_amount,
-                        'fullDescription' => $sharedExpense->expense->notes ?? $sharedExpense->expense->description,
-                    ],
+                    'expense' => $expenseData,
                     'date' => $sharedExpense->created_at->format('Y-m-d'),
                     'status' => $sharedExpense->status,
                 ];
