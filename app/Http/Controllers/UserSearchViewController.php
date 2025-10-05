@@ -15,12 +15,13 @@ class UserSearchViewController extends Controller
     {
         $user = auth()->user();
 
-        // Obtener los gastos compartidos del usuario
+        // Obtener los gastos compartidos del usuario (solo pendientes y aceptados)
         $sharedExpenses = SharedExpense::with(['expense', 'owner', 'sharedWith'])
             ->where(function ($query) use ($user) {
                 $query->where('owner_id', $user->id)
                     ->orWhere('shared_with_id', $user->id);
             })
+            ->whereIn('status', ['pending', 'accepted'])
             ->latest()
             ->take(10)
             ->get()

@@ -34,6 +34,10 @@ function NotificationItem({ notification, onMarkAsRead, onDelete, onAccept, onRe
                 return <CreditCard className="w-5 h-5 text-blue-600" />;
             case 'shared_expense':
                 return <Users className="w-5 h-5 text-purple-600" />;
+            case 'shared_expense_response':
+                return notification.data?.status === 'accepted'
+                    ? <CheckCircle className="w-5 h-5 text-green-600" />
+                    : <XCircle className="w-5 h-5 text-red-600" />;
             case 'profile_update':
                 return <User className="w-5 h-5 text-orange-600" />;
             default:
@@ -51,6 +55,10 @@ function NotificationItem({ notification, onMarkAsRead, onDelete, onAccept, onRe
                 return 'bg-blue-100';
             case 'shared_expense':
                 return 'bg-purple-100';
+            case 'shared_expense_response':
+                return notification.data?.status === 'accepted'
+                    ? 'bg-green-100'
+                    : 'bg-red-100';
             case 'profile_update':
                 return 'bg-orange-100';
             default:
@@ -192,7 +200,6 @@ export default function NotificationsIndex({ notifications: initialNotifications
     const handleAccept = async (sharedExpenseId: number) => {
         try {
             await axios.post(`/shared-expenses/${sharedExpenseId}/accept`);
-            // Recargar la página para actualizar las notificaciones y los gastos
             router.reload();
         } catch (error) {
             console.error('Error al aceptar gasto compartido:', error);
@@ -202,7 +209,6 @@ export default function NotificationsIndex({ notifications: initialNotifications
     const handleReject = async (sharedExpenseId: number) => {
         try {
             await axios.post(`/shared-expenses/${sharedExpenseId}/reject`);
-            // Recargar la página para actualizar las notificaciones
             router.reload();
         } catch (error) {
             console.error('Error al rechazar gasto compartido:', error);
