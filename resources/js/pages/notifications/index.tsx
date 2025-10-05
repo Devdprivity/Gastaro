@@ -1,6 +1,6 @@
 import AdaptiveLayout from '@/layouts/adaptive-layout';
 import { Head, router } from '@inertiajs/react';
-import { Bell, Check, CheckCheck, Trash2, DollarSign, TrendingUp, Users, User, CreditCard } from 'lucide-react';
+import { Bell, Check, CheckCheck, Trash2, DollarSign, TrendingUp, Users, User, CreditCard, CheckCircle, XCircle } from 'lucide-react';
 import { useState } from 'react';
 import axios from 'axios';
 
@@ -19,9 +19,11 @@ interface NotificationItemProps {
     notification: Notification;
     onMarkAsRead: (id: number) => void;
     onDelete: (id: number) => void;
+    onAccept?: (id: number) => void;
+    onReject?: (id: number) => void;
 }
 
-function NotificationItem({ notification, onMarkAsRead, onDelete }: NotificationItemProps) {
+function NotificationItem({ notification, onMarkAsRead, onDelete, onAccept, onReject }: NotificationItemProps) {
     const getIcon = () => {
         switch (notification.type) {
             case 'expense':
@@ -102,22 +104,43 @@ function NotificationItem({ notification, onMarkAsRead, onDelete }: Notification
                         )}
                     </div>
                     <div className="flex items-center gap-2 mt-3">
-                        {!notification.read && (
-                            <button
-                                onClick={() => onMarkAsRead(notification.id)}
-                                className="text-xs text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1"
-                            >
-                                <Check className="w-3 h-3" />
-                                Marcar como leída
-                            </button>
+                        {notification.type === 'shared_expense' && notification.data?.status === 'pending' ? (
+                            <>
+                                <button
+                                    onClick={() => onAccept?.(notification.data.shared_expense_id)}
+                                    className="text-xs text-green-600 hover:text-green-700 font-medium flex items-center gap-1"
+                                >
+                                    <CheckCircle className="w-3 h-3" />
+                                    Aceptar
+                                </button>
+                                <button
+                                    onClick={() => onReject?.(notification.data.shared_expense_id)}
+                                    className="text-xs text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                                >
+                                    <XCircle className="w-3 h-3" />
+                                    Rechazar
+                                </button>
+                            </>
+                        ) : (
+                            <>
+                                {!notification.read && (
+                                    <button
+                                        onClick={() => onMarkAsRead(notification.id)}
+                                        className="text-xs text-orange-600 hover:text-orange-700 font-medium flex items-center gap-1"
+                                    >
+                                        <Check className="w-3 h-3" />
+                                        Marcar como leída
+                                    </button>
+                                )}
+                                <button
+                                    onClick={() => onDelete(notification.id)}
+                                    className="text-xs text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
+                                >
+                                    <Trash2 className="w-3 h-3" />
+                                    Eliminar
+                                </button>
+                            </>
                         )}
-                        <button
-                            onClick={() => onDelete(notification.id)}
-                            className="text-xs text-red-600 hover:text-red-700 font-medium flex items-center gap-1"
-                        >
-                            <Trash2 className="w-3 h-3" />
-                            Eliminar
-                        </button>
                     </div>
                 </div>
             </div>
@@ -163,6 +186,26 @@ export default function NotificationsIndex({ notifications: initialNotifications
             }
         } catch (error) {
             console.error('Error al eliminar notificación:', error);
+        }
+    };
+
+    const handleAccept = async (sharedExpenseId: number) => {
+        try {
+            await axios.post(`/shared-expenses/${sharedExpenseId}/accept`);
+            // Recargar la página para actualizar las notificaciones y los gastos
+            router.reload();
+        } catch (error) {
+            console.error('Error al aceptar gasto compartido:', error);
+        }
+    };
+
+    const handleReject = async (sharedExpenseId: number) => {
+        try {
+            await axios.post(`/shared-expenses/${sharedExpenseId}/reject`);
+            // Recargar la página para actualizar las notificaciones
+            router.reload();
+        } catch (error) {
+            console.error('Error al rechazar gasto compartido:', error);
         }
     };
 
@@ -217,6 +260,8 @@ export default function NotificationsIndex({ notifications: initialNotifications
                                     notification={notification}
                                     onMarkAsRead={handleMarkAsRead}
                                     onDelete={handleDelete}
+                                    onAccept={handleAccept}
+                                    onReject={handleReject}
                                 />
                             ))}
                         </div>

@@ -16,6 +16,7 @@ class SharedExpense extends Model
         'shared_percentage',
         'status',
         'responded_at',
+        'expense_data',
     ];
 
     protected $casts = [
@@ -23,6 +24,7 @@ class SharedExpense extends Model
         'shared_amount' => 'decimal:2',
         'shared_percentage' => 'decimal:2',
         'responded_at' => 'datetime',
+        'expense_data' => 'array',
     ];
 
     public function expense(): BelongsTo
@@ -42,21 +44,34 @@ class SharedExpense extends Model
 
     public function accept(): void
     {
-        // Crear el gasto para el usuario que acepta
-        $originalExpense = $this->expense;
+        $expenseData = $this->expense_data;
 
+        // Crear el gasto para el CREADOR (owner)
+        $ownerExpense = Expense::create([
+            'user_id' => $this->owner_id,
+            'amount' => $this->owner_amount,
+            'description' => $expenseData['description'],
+            'category' => $expenseData['category'] ?? null,
+            'expense_date' => $expenseData['expense_date'],
+            'payment_method' => null,
+            'notes' => $expenseData['notes'] ?? null,
+            'image' => $expenseData['image'] ?? null,
+        ]);
+
+        // Crear el gasto para el usuario que ACEPTA
         Expense::create([
             'user_id' => $this->shared_with_id,
             'amount' => $this->shared_amount,
-            'description' => $originalExpense->description . ' (compartido con ' . $this->owner->name . ')',
-            'category' => $originalExpense->category,
-            'expense_date' => $originalExpense->expense_date,
-            'payment_method' => $originalExpense->payment_method,
-            'notes' => 'Gasto compartido - ' . ($originalExpense->notes ?? ''),
-            'image' => $originalExpense->image,
+            'description' => $expenseData['description'] . ' (compartido con ' . $this->owner->name . ')',
+            'category' => $expenseData['category'] ?? null,
+            'expense_date' => $expenseData['expense_date'],
+            'payment_method' => null,
+            'notes' => 'Gasto compartido - ' . ($expenseData['notes'] ?? ''),
+            'image' => $expenseData['image'] ?? null,
         ]);
 
         $this->update([
+            'expense_id' => $ownerExpense->id,
             'status' => 'accepted',
             'responded_at' => now(),
         ]);

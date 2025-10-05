@@ -53,11 +53,12 @@ class NotificationService
             'user_id' => $user->id,
             'type' => 'shared_expense',
             'title' => 'Gasto compartido',
-            'message' => $inviter->name . " te ha agregado a un gasto compartido de $" . number_format($sharedExpense['amount'], 2),
+            'message' => $inviter->name . " te ha agregado a un gasto compartido de $" . number_format($sharedExpense->shared_amount ?? $sharedExpense['amount'], 2),
             'data' => [
-                'shared_expense_id' => $sharedExpense['id'] ?? null,
+                'shared_expense_id' => $sharedExpense->id ?? $sharedExpense['id'] ?? null,
                 'inviter_name' => $inviter->name,
-                'amount' => $sharedExpense['amount'],
+                'amount' => $sharedExpense->shared_amount ?? $sharedExpense['amount'],
+                'status' => $sharedExpense->status ?? 'pending',
             ],
         ]);
     }

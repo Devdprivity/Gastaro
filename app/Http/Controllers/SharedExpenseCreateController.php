@@ -41,26 +41,23 @@ class SharedExpenseCreateController extends Controller
             $imagePath = $request->file('image')->store('expenses', 'public');
         }
 
-        // Create the expense
-        $expense = Expense::create([
-            'user_id' => $request->user()->id,
-            'amount' => $totalAmount,
-            'description' => $validated['description'],
-            'category' => $validated['category'],
-            'expense_date' => $validated['expense_date'],
-            'payment_method' => null,
-            'notes' => $validated['notes'],
-            'image' => $imagePath,
-        ]);
-
-        // Create the shared expense
+        // Create the shared expense (NO crear Expense todavía, solo guardar la info)
         $sharedExpense = SharedExpense::create([
-            'expense_id' => $expense->id,
+            'expense_id' => null, // Se creará cuando se acepte
             'owner_id' => $request->user()->id,
             'shared_with_id' => $validated['shared_with_id'],
             'owner_amount' => $ownerAmount,
             'shared_amount' => $sharedAmount,
             'status' => 'pending',
+            // Guardar datos del gasto para crear después
+            'expense_data' => json_encode([
+                'amount' => $totalAmount,
+                'description' => $validated['description'],
+                'category' => $validated['category'],
+                'expense_date' => $validated['expense_date'],
+                'notes' => $validated['notes'],
+                'image' => $imagePath,
+            ]),
         ]);
 
         // Crear notificación para el usuario con quien se comparte
