@@ -175,26 +175,26 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
             {/* Mobile View */}
             <div className="md:hidden h-full flex flex-col overflow-hidden">
                 {/* Header */}
-                <div className="flex-none bg-white border-b border-gray-200 px-4 py-4">
-                    <div className="flex items-center gap-3">
+                <div className="flex-none bg-white border-b border-gray-200 px-3 py-3">
+                    <div className="flex items-center gap-2">
                         <Link
                             href="/dashboard"
-                            className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center"
+                            className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
                         >
-                            <ArrowLeft className="w-5 h-5 text-gray-700" />
+                            <ArrowLeft className="w-4 h-4 text-gray-700" />
                         </Link>
-                        <h1 className="text-xl font-bold text-gray-900">Buscar Usuarios</h1>
+                        <h1 className="text-lg font-bold text-gray-900">Buscar Usuarios</h1>
                     </div>
                 </div>
 
                 {/* Content - Sin scroll */}
-                <div className="flex-1 overflow-hidden px-4 py-4 pb-24">
-                    <div className="h-full flex flex-col space-y-4">
+                <div className="flex-1 overflow-hidden px-3 py-3 pb-20">
+                    <div className="h-full flex flex-col space-y-3">
                         {/* Perfil del usuario actual */}
-                        <div className="flex-none bg-gradient-to-br from-orange-50 to-orange-100 rounded-2xl p-4 border border-orange-200">
+                        <div className="flex-none bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-3 border border-orange-200">
                             <div className="text-center">
                                 {/* Avatar grande */}
-                                <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-4 border-orange-500 bg-white flex items-center justify-center shadow-lg">
+                                <div className="w-12 h-12 mx-auto mb-2 rounded-full overflow-hidden border-2 border-orange-500 bg-white flex items-center justify-center shadow-md">
                                     {auth.user.avatar ? (
                                         <img
                                             src={auth.user.avatar}
@@ -202,47 +202,47 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
                                             className="w-full h-full object-cover"
                                         />
                                     ) : (
-                                        <span className="text-orange-600 font-bold text-xl">
+                                        <span className="text-orange-600 font-bold text-lg">
                                             {auth.user.name.charAt(0).toUpperCase()}
                                         </span>
                                     )}
                                 </div>
-                                
+
                                 {/* Nombre */}
-                                <h2 className="text-lg font-bold text-gray-900 mb-2">{auth.user.name}</h2>
-                                
+                                <h2 className="text-base font-bold text-gray-900 mb-1">{auth.user.name}</h2>
+
                                 {/* Título del código */}
-                                <p className="text-xs text-gray-600 mb-2">Tu código de usuario</p>
-                                
+                                <p className="text-[10px] text-gray-600 mb-1.5">Tu código de usuario</p>
+
                                 {/* Código para copiar - Mejorado */}
-                                <div className="flex items-center justify-center gap-2 max-w-xs mx-auto">
-                                    <div className="flex-1 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                                <div className="flex items-center justify-center gap-1.5 max-w-xs mx-auto">
+                                    <div className="flex-1 bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                                         <input
                                             value={auth.user.user_code}
                                             readOnly
-                                            className="w-full py-2 px-3 text-center font-mono text-base font-bold text-orange-600 bg-transparent focus:outline-none"
+                                            className="w-full py-1.5 px-2 text-center font-mono text-sm font-bold text-orange-600 bg-transparent focus:outline-none"
                                         />
                                     </div>
                                     <button
                                         onClick={() => copyToClipboard(auth.user.user_code)}
-                                        className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                                            copySuccess 
-                                                ? 'bg-green-500 text-white' 
+                                        className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                                            copySuccess
+                                                ? 'bg-green-500 text-white'
                                                 : 'bg-orange-500 hover:bg-orange-600 text-white'
                                         }`}
                                     >
                                         {copySuccess ? (
-                                            <CheckCircle className="w-5 h-5" />
+                                            <CheckCircle className="w-4 h-4" />
                                         ) : (
-                                            <Copy className="w-4 h-4" />
+                                            <Copy className="w-3.5 h-3.5" />
                                         )}
                                     </button>
                                 </div>
-                                
+
                                 {/* Feedback de copia */}
                                 {copySuccess && (
-                                    <p className="text-green-600 text-xs font-medium mt-1 flex items-center justify-center gap-1">
-                                        <CheckCircle className="w-3 h-3" />
+                                    <p className="text-green-600 text-[10px] font-medium mt-1 flex items-center justify-center gap-1">
+                                        <CheckCircle className="w-2.5 h-2.5" />
                                         ¡Código copiado!
                                     </p>
                                 )}
@@ -250,33 +250,33 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
                         </div>
 
                         {/* Búsqueda de usuarios */}
-                        <div className="flex-none bg-white rounded-2xl p-4 shadow-sm border border-gray-200">
-                            <div className="flex items-center gap-2 mb-3">
-                                <Search className="w-4 h-4 text-orange-500" />
-                                <h3 className="text-base font-semibold text-gray-900">Buscar Usuario</h3>
+                        <div className="flex-none bg-white rounded-lg p-3 shadow-sm border border-gray-200">
+                            <div className="flex items-center gap-1.5 mb-2">
+                                <Search className="w-3.5 h-3.5 text-orange-500" />
+                                <h3 className="text-sm font-semibold text-gray-900">Buscar Usuario</h3>
                             </div>
-                            
-                            <div className="space-y-3">
-                                <div className="flex gap-2">
+
+                            <div className="space-y-2">
+                                <div className="flex gap-1.5">
                                     <div className="flex-1 relative">
                                         <input
                                             type="text"
                                             value={searchCode}
                                             onChange={(e) => setSearchCode(e.target.value.toUpperCase())}
                                             placeholder="Código (8 caracteres)"
-                                            className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 font-mono text-sm placeholder-gray-400 text-orange-600"
+                                            className="w-full px-2 py-1.5 pr-8 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 font-mono text-xs placeholder-gray-400 text-orange-600"
                                             maxLength={8}
                                         />
-                                        <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                                        <Search className="absolute right-2 top-1/2 transform -translate-y-1/2 w-3 h-3 text-gray-400" />
                                     </div>
                                     <button
                                         onClick={handleSearch}
                                         disabled={isSearching || !searchCode.trim()}
-                                        className="px-4 py-2 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white font-semibold rounded-xl transition-colors disabled:cursor-not-allowed flex items-center gap-1 text-sm"
+                                        className="px-3 py-1.5 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 text-white font-semibold rounded-lg transition-colors disabled:cursor-not-allowed flex items-center gap-1 text-xs"
                                     >
                                         {isSearching ? (
                                             <>
-                                                <svg className="animate-spin h-3 w-3 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <svg className="animate-spin h-2.5 w-2.5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                                                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                                                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                 </svg>
@@ -289,16 +289,16 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
                                 </div>
 
                                 {error && (
-                                    <div className="p-2 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2">
-                                        <AlertCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
-                                        <p className="text-red-600 text-xs">{error}</p>
+                                    <div className="p-1.5 bg-red-50 border border-red-200 rounded-lg flex items-center gap-1.5">
+                                        <AlertCircle className="w-3 h-3 text-red-500 flex-shrink-0" />
+                                        <p className="text-red-600 text-[10px]">{error}</p>
                                     </div>
                                 )}
 
                                 {searchResult && (
-                                    <div className="p-3 bg-green-50 border border-green-200 rounded-xl">
-                                        <div className="flex items-center gap-2">
-                                            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-green-500 bg-green-100 flex items-center justify-center flex-shrink-0">
+                                    <div className="p-2 bg-green-50 border border-green-200 rounded-lg">
+                                        <div className="flex items-center gap-1.5">
+                                            <div className="w-7 h-7 rounded-full overflow-hidden border-2 border-green-500 bg-green-100 flex items-center justify-center flex-shrink-0">
                                                 {searchResult.avatar ? (
                                                     <img
                                                         src={searchResult.avatar}
@@ -306,31 +306,31 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
                                                         className="w-full h-full object-cover"
                                                     />
                                                 ) : (
-                                                    <span className="text-green-600 font-semibold text-xs">
+                                                    <span className="text-green-600 font-semibold text-[10px]">
                                                         {searchResult.name.charAt(0).toUpperCase()}
                                                     </span>
                                                 )}
                                             </div>
                                             <div className="flex-1 min-w-0">
-                                                <h4 className="font-semibold text-gray-900 truncate text-sm">{searchResult.name}</h4>
-                                                <p className="text-xs text-gray-600 font-mono">{searchResult.user_code}</p>
+                                                <h4 className="font-semibold text-gray-900 truncate text-xs">{searchResult.name}</h4>
+                                                <p className="text-[10px] text-gray-600 font-mono">{searchResult.user_code}</p>
                                             </div>
-                                            <button 
+                                            <button
                                                 onClick={handleAddUser}
-                                                className={`px-3 py-1 text-white text-xs font-medium rounded-lg transition-colors flex items-center gap-1 ${
-                                                    addSuccess 
-                                                        ? 'bg-green-500' 
+                                                className={`px-2 py-1 text-white text-[10px] font-medium rounded-md transition-colors flex items-center gap-0.5 ${
+                                                    addSuccess
+                                                        ? 'bg-green-500'
                                                         : 'bg-green-500 hover:bg-green-600'
                                                 }`}
                                             >
                                                 {addSuccess ? (
                                                     <>
-                                                        <CheckCircle className="w-3 h-3" />
+                                                        <CheckCircle className="w-2.5 h-2.5" />
                                                         ¡Agregado!
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <UserPlus className="w-3 h-3" />
+                                                        <UserPlus className="w-2.5 h-2.5" />
                                                         Agregar
                                                     </>
                                                 )}
@@ -342,7 +342,7 @@ export default function SearchUsers({ auth, sharedExpenses }: SearchUsersProps) 
                         </div>
 
                         {/* Carousel de gastos compartidos */}
-                        <div className="flex-1 bg-white rounded-2xl p-4 shadow-sm border border-gray-200 overflow-hidden">
+                        <div className="flex-1 bg-white rounded-lg p-3 shadow-sm border border-gray-200 overflow-hidden">
                             {!selectedExpense ? (
                                 <>
                                     <div className="flex items-center gap-2 mb-3">

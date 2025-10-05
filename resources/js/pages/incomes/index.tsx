@@ -36,10 +36,10 @@ export default function IncomesIndex({
 
             {/* Mobile View */}
             <div className="md:hidden min-h-screen bg-gray-50">
-                <div className="p-4 space-y-6 pt-4">
+                <div className="p-3 space-y-3 pt-3 pb-20">
                     {/* User Profile Card - Center */}
-                    <div className="flex flex-col items-center justify-center py-6">
-                        <div className="relative w-24 h-24 rounded-full overflow-hidden border-4 border-orange-500 bg-orange-100 flex items-center justify-center shadow-lg mb-3">
+                    <div className="flex flex-col items-center justify-center py-3">
+                        <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-orange-500 bg-orange-100 flex items-center justify-center shadow-md mb-2">
                             {auth?.user?.avatar ? (
                                 <img
                                     src={auth.user.avatar}
@@ -47,24 +47,24 @@ export default function IncomesIndex({
                                     className="w-full h-full object-cover"
                                 />
                             ) : (
-                                <span className="text-orange-600 font-bold text-3xl">
+                                <span className="text-orange-600 font-bold text-2xl">
                                     {auth?.user?.name?.charAt(0).toUpperCase()}
                                 </span>
                             )}
                         </div>
-                        <h2 className="text-xl font-bold text-gray-900">{auth?.user?.name}</h2>
-                        <p className="text-sm text-gray-500">{auth?.user?.email}</p>
+                        <h2 className="text-base font-bold text-gray-900">{auth?.user?.name}</h2>
+                        <p className="text-xs text-gray-500">{auth?.user?.email}</p>
                     </div>
 
                     {/* Current Month Income Summary */}
-                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center">
-                        <p className="text-sm text-orange-100 mb-2">
+                    <div className="bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white text-center">
+                        <p className="text-xs text-orange-100 mb-1">
                             Ingreso Total del Mes
                         </p>
-                        <h1 className="text-4xl font-bold mb-1">
+                        <h1 className="text-3xl font-bold mb-0.5">
                             {format(currentIncome?.total ? parseFloat(currentIncome.total.toString()) : 0)}
                         </h1>
-                        <p className="text-xs text-orange-100">
+                        <p className="text-[10px] text-orange-100">
                             {new Date(currentYear, currentMonth - 1).toLocaleDateString('es-MX', {
                                 month: 'long',
                                 year: 'numeric',
@@ -73,45 +73,45 @@ export default function IncomesIndex({
                     </div>
 
                     {/* Income Breakdown */}
-                    <div className="bg-white rounded-xl border border-gray-200 p-4">
-                        <h3 className="font-semibold text-gray-900 mb-4">Desglose de Ingresos</h3>
-                        <div className="space-y-3">
-                            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                                <span className="text-sm text-gray-600">Sueldo</span>
-                                <span className="font-semibold text-gray-900">
+                    <div className="bg-white rounded-lg border border-gray-200 p-3">
+                        <h3 className="text-sm font-semibold text-gray-900 mb-2">Desglose de Ingresos</h3>
+                        <div className="space-y-2">
+                            <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
+                                <span className="text-xs text-gray-600">Sueldo</span>
+                                <span className="text-sm font-semibold text-gray-900">
                                     {format(currentIncome ? parseFloat(currentIncome.salary) : 0)}
                                 </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                                <span className="text-sm text-gray-600">Pagos</span>
-                                <span className="font-semibold text-gray-900">
+                            <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
+                                <span className="text-xs text-gray-600">Pagos</span>
+                                <span className="text-sm font-semibold text-gray-900">
                                     {format(currentIncome ? parseFloat(currentIncome.payments) : 0)}
                                 </span>
                             </div>
-                            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-                                <span className="text-sm text-gray-600">Transferencias</span>
-                                <span className="font-semibold text-gray-900">
+                            <div className="flex items-center justify-between py-1.5 border-b border-gray-100">
+                                <span className="text-xs text-gray-600">Transferencias</span>
+                                <span className="text-sm font-semibold text-gray-900">
                                     {format(currentIncome ? parseFloat(currentIncome.transfers) : 0)}
                                 </span>
                             </div>
-                            <div className="flex items-center justify-between py-2">
-                                <span className="text-sm text-gray-600">Efectivo</span>
-                                <span className="font-semibold text-gray-900">
+                            <div className="flex items-center justify-between py-1.5">
+                                <span className="text-xs text-gray-600">Efectivo</span>
+                                <span className="text-sm font-semibold text-gray-900">
                                     {format(currentIncome ? parseFloat(currentIncome.cash) : 0)}
                                 </span>
                             </div>
                         </div>
 
                         {currentIncome?.notes && (
-                            <div className="mt-4 pt-4 border-t border-gray-100">
-                                <p className="text-xs text-gray-500 mb-1">Notas:</p>
-                                <p className="text-sm text-gray-700">{currentIncome.notes}</p>
+                            <div className="mt-2 pt-2 border-t border-gray-100">
+                                <p className="text-[10px] text-gray-500 mb-0.5">Notas:</p>
+                                <p className="text-xs text-gray-700">{currentIncome.notes}</p>
                             </div>
                         )}
 
                         <Link
                             href="/incomes/create"
-                            className="block w-full mt-4 bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors text-center"
+                            className="block w-full mt-3 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-3 rounded-lg transition-colors text-center text-sm"
                         >
                             {currentIncome ? 'Editar Ingresos' : 'Agregar Ingresos'}
                         </Link>
@@ -119,22 +119,22 @@ export default function IncomesIndex({
 
                     {/* Income History */}
                     {incomes.length > 0 && (
-                        <div className="bg-white rounded-xl border border-gray-200">
-                            <div className="p-4 border-b border-gray-200">
-                                <h3 className="font-semibold text-gray-900">Historial de Ingresos</h3>
+                        <div className="bg-white rounded-lg border border-gray-200">
+                            <div className="p-2.5 border-b border-gray-200">
+                                <h3 className="text-sm font-semibold text-gray-900">Historial de Ingresos</h3>
                             </div>
                             <div className="divide-y divide-gray-200">
                                 {incomes.slice(0, 6).map((income) => (
-                                    <div key={income.id} className="p-4 hover:bg-gray-50">
+                                    <div key={income.id} className="p-3 hover:bg-gray-50">
                                         <div className="flex items-center justify-between">
                                             <div>
-                                                <p className="font-medium text-gray-900">
+                                                <p className="text-sm font-medium text-gray-900">
                                                     {new Date(income.year, income.month - 1).toLocaleDateString('es-MX', {
                                                         month: 'long',
                                                         year: 'numeric',
                                                     })}
                                                 </p>
-                                                <p className="text-xs text-gray-500 mt-0.5">
+                                                <p className="text-[10px] text-gray-500 mt-0.5">
                                                     {income.month === currentMonth &&
                                                     income.year === currentYear
                                                         ? 'Mes actual'
@@ -142,7 +142,7 @@ export default function IncomesIndex({
                                                 </p>
                                             </div>
                                             <div className="text-right">
-                                                <p className="text-lg font-bold text-green-600">
+                                                <p className="text-base font-bold text-green-600">
                                                     {format(income.total ? parseFloat(income.total.toString()) : 0)}
                                                 </p>
                                             </div>
