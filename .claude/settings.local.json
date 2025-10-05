@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(composer:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(php artisan serve:*)",
+      "Bash(php artisan:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)",
+      "Bash(php:*)",
+      "Bash(curl:*)",
+      "Read(//c/tools/php84/**)",
+      "Bash(git checkout:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
