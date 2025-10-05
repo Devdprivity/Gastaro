@@ -66,7 +66,8 @@ class SharedExpenseCreateController extends Controller
         // Crear notificación para el usuario con quien se comparte
         NotificationService::createSharedExpenseNotification(
             $sharedExpense->sharedWith,
-            $sharedExpense
+            $sharedExpense,
+            $request->user()
         );
 
         return redirect()->route('users.search')

@@ -42,6 +42,20 @@ class SharedExpense extends Model
 
     public function accept(): void
     {
+        // Crear el gasto para el usuario que acepta
+        $originalExpense = $this->expense;
+
+        Expense::create([
+            'user_id' => $this->shared_with_id,
+            'amount' => $this->shared_amount,
+            'description' => $originalExpense->description . ' (compartido con ' . $this->owner->name . ')',
+            'category' => $originalExpense->category,
+            'expense_date' => $originalExpense->expense_date,
+            'payment_method' => $originalExpense->payment_method,
+            'notes' => 'Gasto compartido - ' . ($originalExpense->notes ?? ''),
+            'image' => $originalExpense->image,
+        ]);
+
         $this->update([
             'status' => 'accepted',
             'responded_at' => now(),
