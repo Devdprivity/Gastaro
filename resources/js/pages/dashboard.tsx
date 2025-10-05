@@ -53,13 +53,13 @@ export default function Dashboard({ expenses, stats }: DashboardProps) {
 
             {/* Mobile Dashboard */}
             <div className="md:hidden h-full flex flex-col overflow-hidden">
-                <div className="flex-none space-y-4 px-4 pt-4">
+                <div className="flex-none space-y-3 px-3 pt-3">
                     {/* Balance Card and Add Expense Button */}
-                    <div className="flex gap-4">
+                    <div className="flex gap-3">
                         {/* Balance Card */}
-                        <div className="flex-1 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl p-6 text-white text-center shadow-lg">
-                            <p className="text-sm text-orange-100 mb-2">Tu Balance</p>
-                            <h1 className="text-4xl font-bold">
+                        <div className="flex-1 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl p-4 text-white text-center shadow-md">
+                            <p className="text-xs text-orange-100 mb-1">Tu Balance</p>
+                            <h1 className="text-3xl font-bold">
                                 {format(parseFloat(stats.total?.toString() || '0'))}
                             </h1>
                         </div>
@@ -68,12 +68,12 @@ export default function Dashboard({ expenses, stats }: DashboardProps) {
                         <div className="flex-shrink-0">
                             <Link
                                 href="/expenses/create"
-                                className="h-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-4 px-4 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 transform hover:-translate-y-0.5 flex flex-col items-center justify-center gap-2 min-h-[120px]"
+                                className="h-full bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-3 rounded-xl shadow-md transition-all duration-200 flex flex-col items-center justify-center gap-1 min-h-[90px]"
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                                 </svg>
-                                <span className="text-sm font-medium text-center leading-tight">
+                                <span className="text-xs font-medium text-center leading-tight">
                                     Ingresar<br />Gasto
                                 </span>
                             </Link>
@@ -81,41 +81,41 @@ export default function Dashboard({ expenses, stats }: DashboardProps) {
                     </div>
 
                     {/* Stats Grid */}
-                    <div className="grid grid-cols-3 gap-3">
-                        <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm">
-                            <div className="text-xl font-bold text-gray-900">{stats.count}</div>
-                            <div className="text-xs text-gray-500 mt-1">Gastos</div>
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+                            <div className="text-lg font-bold text-gray-900">{stats.count}</div>
+                            <div className="text-[10px] text-gray-500 mt-0.5">Gastos</div>
                         </div>
-                        <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm">
-                            <div className="text-xl font-bold text-orange-600">
+                        <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+                            <div className="text-lg font-bold text-orange-600">
                                 {format(parseFloat(stats.today?.toString() || '0'))}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">Hoy</div>
+                            <div className="text-[10px] text-gray-500 mt-0.5">Hoy</div>
                         </div>
-                        <div className="bg-white rounded-xl p-3 border border-gray-200 shadow-sm">
-                            <div className="text-xl font-bold text-green-600">
+                        <div className="bg-white rounded-lg p-2 border border-gray-200 shadow-sm">
+                            <div className="text-lg font-bold text-green-600">
                                 {format(parseFloat(stats.month?.toString() || '0'))}
                             </div>
-                            <div className="text-xs text-gray-500 mt-1">Este Mes</div>
+                            <div className="text-[10px] text-gray-500 mt-0.5">Este Mes</div>
                         </div>
                     </div>
                     </div>
 
                     {/* Recent Expenses - Con scroll independiente */}
-                <div className="flex-1 px-4 pt-4 pb-24 overflow-hidden">
-                    <div className="bg-white rounded-xl border border-gray-200 shadow-sm h-full flex flex-col">
-                        <div className="flex-none p-4 border-b border-gray-200 flex items-center justify-between">
-                            <h2 className="font-semibold text-gray-900">Gastos Recientes</h2>
+                <div className="flex-1 px-3 pt-3 pb-20 overflow-hidden">
+                    <div className="bg-white rounded-lg border border-gray-200 shadow-sm h-full flex flex-col">
+                        <div className="flex-none p-3 border-b border-gray-200 flex items-center justify-between">
+                            <h2 className="text-sm font-semibold text-gray-900">Gastos Recientes</h2>
                             <Link
                                 href="/expenses"
-                                className="text-sm font-medium text-orange-600 hover:text-orange-700"
+                                className="text-xs font-medium text-orange-600 hover:text-orange-700"
                             >
                                 Todas →
                             </Link>
                         </div>
                         <div className="flex-1 overflow-y-auto divide-y divide-gray-200">
                             {expenses.length === 0 ? (
-                                <div className="p-8 text-center text-gray-500">
+                                <div className="p-6 text-center text-gray-500 text-sm">
                                     No hay gastos registrados
                                 </div>
                             ) : (
@@ -126,22 +126,22 @@ export default function Dashboard({ expenses, stats }: DashboardProps) {
                                     const DetectionIcon = detection?.icon;
 
                                     return (
-                                        <div key={expense.id} className="p-4 hover:bg-gray-50 transition-colors">
-                                            <div className="flex items-start justify-between gap-3">
+                                        <div key={expense.id} className="p-3 hover:bg-gray-50 transition-colors">
+                                            <div className="flex items-start justify-between gap-2">
                                                 <div className="flex-1 min-w-0">
-                                                    <div className="flex items-center gap-2 mb-1">
+                                                    <div className="flex items-center gap-1.5 mb-0.5">
                                                         <p className="text-sm font-medium text-gray-900 truncate">
                                                             {expense.description}
                                                         </p>
                                                         {DetectionIcon && (
                                                             <DetectionIcon
-                                                                className={`w-4 h-4 flex-shrink-0 ${detection.color}`}
+                                                                className={`w-3.5 h-3.5 flex-shrink-0 ${detection.color}`}
                                                             />
                                                         )}
                                                     </div>
-                                                    <div className="flex items-center gap-2 text-xs text-gray-500">
+                                                    <div className="flex items-center gap-1.5 text-[10px] text-gray-500">
                                                         {expense.category && (
-                                                            <span className="bg-gray-100 px-2 py-0.5 rounded">
+                                                            <span className="bg-gray-100 px-1.5 py-0.5 rounded">
                                                                 {expense.category}
                                                             </span>
                                                         )}
@@ -156,11 +156,11 @@ export default function Dashboard({ expenses, stats }: DashboardProps) {
                                                     </div>
                                                 </div>
                                                 <div className="text-right flex-shrink-0">
-                                                    <p className="text-lg font-bold text-gray-900">
+                                                    <p className="text-base font-bold text-gray-900">
                                                         {format(parseFloat(expense.amount))}
                                                     </p>
                                                     {expense.payment_method && (
-                                                        <p className="text-xs text-gray-500">
+                                                        <p className="text-[10px] text-gray-500">
                                                             {expense.payment_method}
                                                         </p>
                                                     )}
