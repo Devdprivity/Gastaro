@@ -11,7 +11,8 @@
       "Bash(php:*)",
       "Bash(curl:*)",
       "Read(//c/tools/php84/**)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Read(//e/DesarrolloWeb/gastaro/app/Http/Controllers/Api/**)"
     ],
     "deny": [],
     "ask": []

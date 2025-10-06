@@ -276,9 +276,160 @@ export default function NotificationsIndex({ notifications: initialNotifications
             </div>
 
             {/* Desktop View */}
-            <div className="hidden md:block p-8">
-                <h1 className="text-2xl font-bold mb-4">Notificaciones</h1>
-                <p className="text-gray-600">Vista de escritorio en desarrollo...</p>
+            <div className="hidden md:flex h-screen flex-col p-6 overflow-hidden">
+                {/* Header */}
+                <div className="mb-6 flex items-center justify-between">
+                    <div>
+                        <h1 className="text-2xl font-bold text-gray-900">Notificaciones</h1>
+                        {unreadCount > 0 && (
+                            <p className="text-sm text-gray-600 mt-1">
+                                {unreadCount} sin leer
+                            </p>
+                        )}
+                    </div>
+                    {unreadCount > 0 && (
+                        <button
+                            onClick={handleMarkAllAsRead}
+                            className="flex items-center gap-2 px-4 py-2 bg-orange-100 text-orange-700 rounded-xl font-medium hover:bg-orange-200 transition-colors"
+                        >
+                            <CheckCheck className="w-5 h-5" />
+                            Marcar todas como leídas
+                        </button>
+                    )}
+                </div>
+
+                {/* Notifications List */}
+                <div className="flex-1 bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+                    {notifications.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full py-12 px-4">
+                            <div className="w-32 h-32 rounded-full bg-gray-100 flex items-center justify-center mb-6">
+                                <Bell className="w-16 h-16 text-gray-400" />
+                            </div>
+                            <h2 className="text-2xl font-semibold text-gray-900 mb-3">
+                                No tienes notificaciones
+                            </h2>
+                            <p className="text-base text-gray-600 text-center max-w-md">
+                                Cuando tengas nuevas notificaciones, aparecerán aquí
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="h-full overflow-y-auto">
+                            {notifications.map((notification) => (
+                                <div
+                                    key={notification.id}
+                                    className={`p-6 border-b border-gray-200 ${!notification.read ? 'bg-orange-50' : 'bg-white'} hover:bg-gray-50 transition-colors`}
+                                >
+                                    <div className="flex items-start gap-4">
+                                        <div className={`w-12 h-12 rounded-full ${(() => {
+                                            switch (notification.type) {
+                                                case 'expense': return 'bg-red-100';
+                                                case 'income': return 'bg-green-100';
+                                                case 'gastaro_pay': return 'bg-blue-100';
+                                                case 'shared_expense': return 'bg-purple-100';
+                                                case 'shared_expense_response':
+                                                    return notification.data?.status === 'accepted' ? 'bg-green-100' : 'bg-red-100';
+                                                case 'profile_update': return 'bg-orange-100';
+                                                default: return 'bg-gray-100';
+                                            }
+                                        })()} flex items-center justify-center flex-shrink-0`}>
+                                            {(() => {
+                                                switch (notification.type) {
+                                                    case 'expense': return <DollarSign className="w-6 h-6 text-red-600" />;
+                                                    case 'income': return <TrendingUp className="w-6 h-6 text-green-600" />;
+                                                    case 'gastaro_pay': return <CreditCard className="w-6 h-6 text-blue-600" />;
+                                                    case 'shared_expense': return <Users className="w-6 h-6 text-purple-600" />;
+                                                    case 'shared_expense_response':
+                                                        return notification.data?.status === 'accepted'
+                                                            ? <CheckCircle className="w-6 h-6 text-green-600" />
+                                                            : <XCircle className="w-6 h-6 text-red-600" />;
+                                                    case 'profile_update': return <User className="w-6 h-6 text-orange-600" />;
+                                                    default: return <Bell className="w-6 h-6 text-gray-600" />;
+                                                }
+                                            })()}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="flex-1">
+                                                    <h3 className="text-base font-semibold text-gray-900">
+                                                        {notification.title}
+                                                    </h3>
+                                                    <p className="text-base text-gray-600 mt-2">
+                                                        {notification.message}
+                                                    </p>
+                                                    <p className="text-sm text-gray-500 mt-3">
+                                                        {(() => {
+                                                            const date = new Date(notification.created_at);
+                                                            const now = new Date();
+                                                            const diff = now.getTime() - date.getTime();
+                                                            const hours = Math.floor(diff / (1000 * 60 * 60));
+                                                            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+                                                            if (hours < 1) {
+                                                                const minutes = Math.floor(diff / (1000 * 60));
+                                                                return `Hace ${minutes} min`;
+                                                            } else if (hours < 24) {
+                                                                return `Hace ${hours}h`;
+                                                            } else if (days < 7) {
+                                                                return `Hace ${days}d`;
+                                                            } else {
+                                                                return date.toLocaleDateString('es-ES', {
+                                                                    day: 'numeric',
+                                                                    month: 'short'
+                                                                });
+                                                            }
+                                                        })()}
+                                                    </p>
+                                                </div>
+                                                {!notification.read && (
+                                                    <div className="w-3 h-3 rounded-full bg-orange-500 flex-shrink-0 mt-1" />
+                                                )}
+                                            </div>
+                                            <div className="flex items-center gap-3 mt-4">
+                                                {notification.type === 'shared_expense' && notification.data?.status === 'pending' ? (
+                                                    <>
+                                                        <button
+                                                            onClick={() => handleAccept(notification.data.shared_expense_id)}
+                                                            className="px-4 py-2 text-sm text-green-600 hover:text-green-700 hover:bg-green-50 font-medium flex items-center gap-2 rounded-lg transition-colors"
+                                                        >
+                                                            <CheckCircle className="w-4 h-4" />
+                                                            Aceptar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleReject(notification.data.shared_expense_id)}
+                                                            className="px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 font-medium flex items-center gap-2 rounded-lg transition-colors"
+                                                        >
+                                                            <XCircle className="w-4 h-4" />
+                                                            Rechazar
+                                                        </button>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {!notification.read && (
+                                                            <button
+                                                                onClick={() => handleMarkAsRead(notification.id)}
+                                                                className="px-4 py-2 text-sm text-orange-600 hover:text-orange-700 hover:bg-orange-50 font-medium flex items-center gap-2 rounded-lg transition-colors"
+                                                            >
+                                                                <Check className="w-4 h-4" />
+                                                                Marcar como leída
+                                                            </button>
+                                                        )}
+                                                        <button
+                                                            onClick={() => handleDelete(notification.id)}
+                                                            className="px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 font-medium flex items-center gap-2 rounded-lg transition-colors"
+                                                        >
+                                                            <Trash2 className="w-4 h-4" />
+                                                            Eliminar
+                                                        </button>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </AdaptiveLayout>
     );

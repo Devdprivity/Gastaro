@@ -605,10 +605,426 @@ export default function ExpenseCreate() {
                 </div>
             </div>
 
-            {/* Desktop View - Placeholder */}
-            <div className="hidden md:block p-8">
-                <h1 className="text-2xl font-bold mb-4">Nuevo Gasto</h1>
-                <p className="text-gray-600">Vista de escritorio en desarrollo...</p>
+            {/* Desktop View */}
+            <div className="hidden md:flex h-screen flex-col p-6 overflow-hidden">
+                {/* Header */}
+                <div className="mb-6">
+                    <h1 className="text-2xl font-bold text-gray-900">Nuevo Gasto</h1>
+                </div>
+
+                {/* Form Container */}
+                <div className="flex-1 overflow-y-auto">
+                    <div className="max-w-3xl mx-auto">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            {/* Amount - Full width */}
+                            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                    <DollarSign className="w-5 h-5 inline mr-2" />
+                                    Monto *
+                                </label>
+                                <div className="relative">
+                                    <span className="absolute left-6 top-1/2 transform -translate-y-1/2 text-2xl font-bold text-orange-600">
+                                        {symbol}
+                                    </span>
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0"
+                                        value={data.amount}
+                                        onChange={(e) => setData('amount', e.target.value)}
+                                        className="w-full pl-16 pr-6 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-2xl font-bold bg-white text-orange-600"
+                                        placeholder="0.00"
+                                        required
+                                        autoFocus
+                                    />
+                                </div>
+                                {errors.amount && (
+                                    <p className="mt-2 text-sm text-red-600">{errors.amount}</p>
+                                )}
+                            </div>
+
+                            {/* Description - Full width */}
+                            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                    <FileText className="w-5 h-5 inline mr-2" />
+                                    Descripción *
+                                </label>
+                                <input
+                                    type="text"
+                                    value={data.description}
+                                    onChange={(e) => setData('description', e.target.value)}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-orange-600 text-lg"
+                                    placeholder="¿En qué gastaste?"
+                                    required
+                                />
+                                {errors.description && (
+                                    <p className="mt-2 text-sm text-red-600">{errors.description}</p>
+                                )}
+                            </div>
+
+                            {/* Category and Date - Side by side */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        <Tag className="w-5 h-5 inline mr-2" />
+                                        Categoría
+                                    </label>
+                                    <select
+                                        value={data.category}
+                                        onChange={(e) => setData('category', e.target.value)}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-orange-600 bg-white text-base font-medium"
+                                    >
+                                        <option value="" className="text-orange-600">Seleccionar categoría</option>
+                                        {categories.map((category) => (
+                                            <option key={category} value={category} className="text-orange-600">
+                                                {category}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.category && (
+                                        <p className="mt-2 text-sm text-red-600">{errors.category}</p>
+                                    )}
+                                </div>
+
+                                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        <Calendar className="w-5 h-5 inline mr-2" />
+                                        Fecha *
+                                    </label>
+                                    <div className="relative" ref={calendarRef}>
+                                        <input
+                                            type="text"
+                                            value={data.expense_date ? new Date(data.expense_date).toLocaleDateString('es-MX') : ''}
+                                            onClick={() => setShowCalendar(!showCalendar)}
+                                            readOnly
+                                            className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base cursor-pointer bg-white text-orange-600 font-medium"
+                                            placeholder="Seleccionar fecha"
+                                            required
+                                        />
+                                        <Calendar className="absolute right-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+
+                                        {showCalendar && (
+                                            <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl z-50 p-4">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => navigateMonth('prev')}
+                                                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                                    >
+                                                        <ChevronLeft className="w-5 h-5 text-gray-600" />
+                                                    </button>
+                                                    <h3 className="font-semibold text-gray-900">
+                                                        {currentMonth.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' })}
+                                                    </h3>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => navigateMonth('next')}
+                                                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                                                    >
+                                                        <ChevronRight className="w-5 h-5 text-gray-600" />
+                                                    </button>
+                                                </div>
+
+                                                <div className="grid grid-cols-7 gap-1 mb-2">
+                                                    {['D', 'L', 'M', 'X', 'J', 'V', 'S'].map((day, index) => (
+                                                        <div key={index} className="text-center text-sm font-medium text-gray-400 py-2">
+                                                            {day}
+                                                        </div>
+                                                    ))}
+                                                </div>
+
+                                                <div className="grid grid-cols-7 gap-1">
+                                                    {getDaysInMonth(currentMonth).map((day, index) => (
+                                                        <button
+                                                            key={index}
+                                                            type="button"
+                                                            onClick={() => day && handleDateSelect(day)}
+                                                            disabled={!day}
+                                                            className={`
+                                                                w-10 h-10 text-sm rounded-full transition-all duration-200 flex items-center justify-center mx-auto
+                                                                ${!day ? 'invisible' : ''}
+                                                                ${day && formatDate(day) === data.expense_date
+                                                                    ? 'bg-orange-500 text-white font-semibold shadow-md'
+                                                                    : 'hover:bg-gray-100 text-gray-700 active:bg-gray-200'
+                                                                }
+                                                                ${day && day.getDate() === new Date().getDate() &&
+                                                                  day.getMonth() === new Date().getMonth() &&
+                                                                  day.getFullYear() === new Date().getFullYear() &&
+                                                                  formatDate(day) !== data.expense_date
+                                                                    ? 'bg-gray-100 font-semibold'
+                                                                    : ''
+                                                                }
+                                                            `}
+                                                        >
+                                                            {day?.getDate()}
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                    {errors.expense_date && (
+                                        <p className="mt-2 text-sm text-red-600">{errors.expense_date}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Payment Method and Notes - Side by side */}
+                            <div className="grid grid-cols-2 gap-4">
+                                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        <CreditCard className="w-5 h-5 inline mr-2" />
+                                        Método de Pago
+                                    </label>
+                                    <select
+                                        value={data.payment_method}
+                                        onChange={(e) => setData('payment_method', e.target.value)}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-orange-600 bg-white font-medium text-base"
+                                    >
+                                        <option value="" className="text-orange-600">Seleccionar método</option>
+                                        {paymentMethods.map((method) => (
+                                            <option key={method} value={method} className="text-orange-600">
+                                                {method}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    {errors.payment_method && (
+                                        <p className="mt-2 text-sm text-red-600">{errors.payment_method}</p>
+                                    )}
+                                </div>
+
+                                <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                                        Notas
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={data.notes}
+                                        onChange={(e) => setData('notes', e.target.value)}
+                                        className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 bg-white text-orange-600 text-base"
+                                        placeholder="Notas adicionales..."
+                                    />
+                                    {errors.notes && (
+                                        <p className="mt-2 text-sm text-red-600">{errors.notes}</p>
+                                    )}
+                                </div>
+                            </div>
+
+                            {/* Compartir Gasto */}
+                            <div className="bg-orange-50 rounded-xl p-6 border border-orange-200">
+                                <div className="flex items-center justify-between mb-4">
+                                    <div className="flex items-center gap-3">
+                                        <Users className="w-6 h-6 text-orange-600" />
+                                        <label className="text-base font-semibold text-gray-900">
+                                            Compartir Gasto
+                                        </label>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setData('is_shared', !data.is_shared);
+                                            if (data.is_shared) {
+                                                setSearchedUser(null);
+                                                setData({
+                                                    ...data,
+                                                    is_shared: false,
+                                                    shared_user_code: '',
+                                                    shared_type: '50/50',
+                                                    owner_amount: '',
+                                                    shared_amount: '',
+                                                });
+                                            }
+                                        }}
+                                        className={`w-14 h-7 rounded-full transition-colors ${
+                                            data.is_shared ? 'bg-orange-500' : 'bg-gray-300'
+                                        }`}
+                                    >
+                                        <div
+                                            className={`w-6 h-6 bg-white rounded-full shadow-md transform transition-transform ${
+                                                data.is_shared ? 'translate-x-7' : 'translate-x-0.5'
+                                            }`}
+                                        />
+                                    </button>
+                                </div>
+
+                                {data.is_shared && (
+                                    <div className="space-y-4">
+                                        {/* Buscar Usuario */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Código de Usuario
+                                            </label>
+                                            <div className="flex gap-3">
+                                                <input
+                                                    type="text"
+                                                    value={data.shared_user_code}
+                                                    onChange={(e) => setData('shared_user_code', e.target.value.toUpperCase())}
+                                                    placeholder="Ej: ABC12345"
+                                                    className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base text-orange-600 font-mono"
+                                                    maxLength={8}
+                                                />
+                                                <button
+                                                    type="button"
+                                                    onClick={searchUser}
+                                                    className="px-6 py-3 bg-orange-500 hover:bg-orange-600 text-white font-medium rounded-xl text-base transition-colors"
+                                                >
+                                                    Buscar
+                                                </button>
+                                            </div>
+                                            {searchError && (
+                                                <p className="mt-2 text-sm text-red-600">{searchError}</p>
+                                            )}
+                                            {searchedUser && (
+                                                <div className="mt-3 p-4 bg-white rounded-xl border border-orange-200 flex items-center justify-between">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center">
+                                                            <span className="text-orange-600 font-semibold">
+                                                                {searchedUser.name.charAt(0).toUpperCase()}
+                                                            </span>
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-base font-medium text-gray-900">{searchedUser.name}</p>
+                                                            <p className="text-sm text-gray-500 font-mono">{searchedUser.user_code}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                            setSearchedUser(null);
+                                                            setData('shared_user_code', '');
+                                                        }}
+                                                        className="text-gray-400 hover:text-gray-600"
+                                                    >
+                                                        <X className="w-5 h-5" />
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Tipo de División */}
+                                        <div>
+                                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                Tipo de División
+                                            </label>
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setData('shared_type', '50/50')}
+                                                    className={`py-3 px-4 rounded-xl border-2 text-base font-medium transition-colors ${
+                                                        data.shared_type === '50/50'
+                                                            ? 'border-orange-500 bg-orange-50 text-orange-700'
+                                                            : 'border-gray-200 bg-white text-gray-600'
+                                                    }`}
+                                                >
+                                                    50/50
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setData('shared_type', 'custom')}
+                                                    className={`py-3 px-4 rounded-xl border-2 text-base font-medium transition-colors ${
+                                                        data.shared_type === 'custom'
+                                                            ? 'border-orange-500 bg-orange-50 text-orange-700'
+                                                            : 'border-gray-200 bg-white text-gray-600'
+                                                    }`}
+                                                >
+                                                    Personalizado
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Montos */}
+                                        {data.shared_type === 'custom' ? (
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                        Tú pagas
+                                                    </label>
+                                                    <div className="relative">
+                                                        <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base font-semibold text-orange-600">
+                                                            {symbol}
+                                                        </span>
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            value={data.owner_amount}
+                                                            onChange={(e) => setData('owner_amount', e.target.value)}
+                                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base text-orange-600"
+                                                            placeholder="0.00"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                                                        {searchedUser?.name || 'Otro'} paga
+                                                    </label>
+                                                    <div className="relative">
+                                                        <span className="absolute left-4 top-1/2 transform -translate-y-1/2 text-base font-semibold text-orange-600">
+                                                            {symbol}
+                                                        </span>
+                                                        <input
+                                                            type="number"
+                                                            step="0.01"
+                                                            value={data.shared_amount}
+                                                            onChange={(e) => setData('shared_amount', e.target.value)}
+                                                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base text-orange-600"
+                                                            placeholder="0.00"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ) : (
+                                            data.owner_amount && (
+                                                <div className="bg-white rounded-xl p-4 border border-orange-200">
+                                                    <div className="flex items-center justify-between text-base mb-2">
+                                                        <span className="text-gray-600">Tú pagas:</span>
+                                                        <span className="font-bold text-orange-600">{symbol}{data.owner_amount}</span>
+                                                    </div>
+                                                    <div className="flex items-center justify-between text-base">
+                                                        <span className="text-gray-600">{searchedUser?.name || 'Otro'} paga:</span>
+                                                        <span className="font-bold text-orange-600">{symbol}{data.shared_amount}</span>
+                                                    </div>
+                                                </div>
+                                            )
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Image Upload */}
+                            <div className="bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
+                                <label className="block text-sm font-medium text-gray-700 mb-3">
+                                    <Camera className="w-5 h-5 inline mr-2" />
+                                    Recibo/Foto
+                                </label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-base"
+                                />
+                                {errors.image && (
+                                    <p className="mt-2 text-sm text-red-600">{errors.image}</p>
+                                )}
+                                {imagePreview && (
+                                    <div className="mt-4">
+                                        <img src={imagePreview} alt="Preview" className="max-w-xs rounded-lg border border-gray-200" />
+                                    </div>
+                                )}
+                            </div>
+
+                            {/* Submit Button */}
+                            <div className="flex justify-end">
+                                <button
+                                    type="submit"
+                                    disabled={processing}
+                                    className="px-8 py-4 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold rounded-xl shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed text-base"
+                                >
+                                    {processing ? 'Guardando...' : 'Guardar Gasto'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
         </AdaptiveLayout>
     );

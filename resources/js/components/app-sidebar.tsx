@@ -13,10 +13,10 @@ import {
 import { dashboard } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { LayoutGrid, Receipt, PlusCircle, Users, Bell } from 'lucide-react';
 import AppLogo from './app-logo';
 
-const mainNavItems: NavItem[] = [
+const dashboardNavItems: NavItem[] = [
     {
         title: 'Dashboard',
         href: dashboard(),
@@ -24,18 +24,39 @@ const mainNavItems: NavItem[] = [
     },
 ];
 
-const footerNavItems: NavItem[] = [
+const expensesNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Transacciones',
+        href: '/expenses',
+        icon: Receipt,
     },
 ];
+
+const actionsNavItems: NavItem[] = [
+    {
+        title: 'Nuevo Gasto',
+        href: '/expenses/create',
+        icon: PlusCircle,
+    },
+];
+
+const usersNavItems: NavItem[] = [
+    {
+        title: 'Buscar Usuarios',
+        href: '/users/search',
+        icon: Users,
+    },
+];
+
+const notificationsNavItems: NavItem[] = [
+    {
+        title: 'Notificaciones',
+        href: '/notifications',
+        icon: Bell,
+    },
+];
+
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     return (
@@ -53,11 +74,15 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={dashboardNavItems} title="Principal" />
+                <NavMain items={expensesNavItems} title="Gastos" />
+                <NavMain items={actionsNavItems} title="Acciones" />
+                <NavMain items={usersNavItems} title="Usuarios" />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
+                <NavMain items={notificationsNavItems} title="Notificaciones" />
+                <NavFooter items={footerNavItems} />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

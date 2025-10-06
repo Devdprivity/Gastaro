@@ -15,9 +15,11 @@ export default function Login({ status }: LoginProps) {
                 {/* Logo & Brand */}
                 <div className="text-center mb-8">
                     <div className="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-white rounded-3xl shadow-2xl mb-4 transform hover:scale-105 transition-transform duration-300">
-                        <span className="text-4xl sm:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-br from-orange-500 to-orange-600">
-                            G
-                        </span>
+                        <img 
+                            src="/favicon.svg" 
+                            alt="Gastaro Logo" 
+                            className="w-12 h-12 sm:w-14 sm:h-14"
+                        />
                     </div>
                     <h1 className="text-3xl sm:text-4xl font-black text-white mb-2 tracking-tight">
                         Gastaro
@@ -33,7 +35,7 @@ export default function Login({ status }: LoginProps) {
                     <div className="p-6 sm:p-8">
                         {/* Status Messages */}
                         {status && (
-                            <div className="mb-4 p-4 bg-orange-50 border-l-4 border-orange-500 rounded-lg">
+                            <div className="mb-4 p-4 wi bg-orange-50 border-l-4 border-orange-500 rounded-lg">
                                 <p className="text-sm text-orange-800 font-medium">{status}</p>
                             </div>
                         )}
