@@ -29,8 +29,22 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
 
+        // Calculate total income
+        $totalIncome = auth()->user()
+            ->incomes()
+            ->get()
+            ->sum(function ($income) {
+                return $income->total;
+            });
+
+        // Calculate total expenses
+        $totalExpenses = auth()->user()->expenses()->sum('amount');
+
+        // Calculate balance (Income - Expenses)
+        $balance = $totalIncome - $totalExpenses;
+
         $stats = [
-            'total' => auth()->user()->expenses()->sum('amount'),
+            'total' => $balance, // Balance real (Ingresos - Gastos)
             'count' => auth()->user()->expenses()->count(),
             'today' => auth()->user()->expenses()->whereDate('expense_date', today())->sum('amount'),
             'month' => auth()->user()->expenses()->whereMonth('expense_date', now()->month)->sum('amount'),
