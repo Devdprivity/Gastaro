@@ -24,11 +24,13 @@ class ExpenseController extends Controller
         // Calculate stats
         $totalExpenses = $request->user()->expenses()->sum('amount');
 
-        // Calculate total income from all income records
-        $totalIncome = (float) ($request->user()
+        // Calculate total income from all income records (sum all totals from each income)
+        $totalIncome = $request->user()
             ->incomes()
-            ->selectRaw('SUM(COALESCE(CAST(salary AS DECIMAL(10,2)), 0) + COALESCE(CAST(payments AS DECIMAL(10,2)), 0) + COALESCE(CAST(transfers AS DECIMAL(10,2)), 0) + COALESCE(CAST(cash AS DECIMAL(10,2)), 0)) as total')
-            ->value('total') ?? 0);
+            ->get()
+            ->sum(function ($income) {
+                return $income->total;
+            });
 
         // Get expenses grouped by date for chart (last 7 days)
         $chartData = $request->user()
